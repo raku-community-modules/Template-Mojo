@@ -1,0 +1,7 @@
+{
+    "name"        : "Template::Mojo",
+    "version"     : "*",
+    "description" : "A templating system similar to Perl 5's Mojo::Template",
+    "depends"     : [],
+    "source-url"  : "git://github.com/tadzik/Template-Mojo.git"
+}
