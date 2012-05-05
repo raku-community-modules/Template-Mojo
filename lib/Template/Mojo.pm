@@ -83,13 +83,3 @@ class Template::Mojo {
         &.code.(|@a)
     }
 }
-
-sub compile(Str $tmpl) {
-    my $m = Template::Mojo::Grammar.parse(
-        $tmpl, :actions(Template::Mojo::Actions.new)
-    );
-    if $m {
-        say $m.ast;
-        return eval $m.ast;
-    }
-}
