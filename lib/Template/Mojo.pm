@@ -18,7 +18,7 @@ grammar Template::Mojo::Grammar {
     }
 
     token characters {
-        [ <!before '<%' || \n > . ]+ \n?
+        \n | [ <!before '<%' || \n > . ]+ \n?
     }
 }
 
