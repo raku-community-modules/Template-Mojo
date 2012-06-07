@@ -39,7 +39,8 @@ class Template::Mojo::Actions {
             make $<perlexpr>.ast
         }
         else {
-            make sprintf q[;$_M ~= '%s';], $<characters>.Str;
+            make sprintf q[;$_M ~= '%s';],
+                         $<characters>.Str.subst(/"'"/, "\\'", :g)
         }
     }
 
