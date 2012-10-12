@@ -1,6 +1,6 @@
 use Test;
 use Template::Mojo;
-plan 12;
+plan 13;
 
 sub render($tmpl, *@a) {
     Template::Mojo.new($tmpl).render(|@a)
@@ -18,3 +18,5 @@ is render("% for 1..3 \{\nhello\n% \}\n"), "hello\nhello\nhello\n";
 is render("hello\n%# die 'this is an harmless comment'\nworld"), "hello\nworld";
 is render("<a href='foo'>bar</a>"), "<a href='foo'>bar</a>";
 is render("a happy <%= \$^a %>\n", 'bar'), "a happy bar\n";
+is render("% my (\$a, \$b) = \@_\n<%= \$a %> and <%= \$b %>", 5, 7),
+   '5 and 7';
