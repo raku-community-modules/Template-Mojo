@@ -1,6 +1,6 @@
 use Test;
 use Template::Mojo;
-plan 13;
+plan 14;
 
 sub render($tmpl, *@a) {
     Template::Mojo.new($tmpl).render(|@a)
@@ -20,3 +20,4 @@ is render("<a href='foo'>bar</a>"), "<a href='foo'>bar</a>";
 is render("a happy <%= \$^a %>\n", 'bar'), "a happy bar\n";
 is render("% my (\$a, \$b) = \@_\n<%= \$a %> and <%= \$b %>", 5, 7),
    '5 and 7';
+is render("% 0\n  an indented line\n%= 'foo'"), "  an indented line\nfoo";

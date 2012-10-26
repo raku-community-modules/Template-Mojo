@@ -10,7 +10,7 @@ grammar Template::Mojo::Grammar {
     }
 
     token perlline {
-        ^^ \h* '%' $<get-result>=['=']? $<expr>=[ <-[\n]>* ] \s+
+        ^^ \h* '%' $<get-result>=['=']? $<expr>=[ <-[\n]>* ] [\n | $]
     }
 
     token perlexpr {
