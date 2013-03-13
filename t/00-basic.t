@@ -6,18 +6,28 @@ sub render($tmpl, *@a) {
     Template::Mojo.new($tmpl).render(|@a)
 }
 
-is render(''), '';
-is render('hello'), 'hello';
-is render("empty\n\nline"), "empty\n\nline";
-is render("almost empty\n \nline"), "almost empty\n \nline";
-is render('hello <%%> world'), 'hello  world';
-is render('hello <%= "world" %>'), 'hello world';
-is render('answer = <%= $^a + $^b %>', 40, 2), 'answer = 42';
-is render('hello <% "blarg" %> world'), 'hello  world';
-is render("% for 1..3 \{\nhello\n% \}\n"), "hello\nhello\nhello\n";
-is render("hello\n%# die 'this is an harmless comment'\nworld"), "hello\nworld";
-is render("<a href='foo'>bar</a>"), "<a href='foo'>bar</a>";
-is render("a happy <%= \$^a %>\n", 'bar'), "a happy bar\n";
-is render("% my (\$a, \$b) = \@_\n<%= \$a %> and <%= \$b %>", 5, 7),
-   '5 and 7';
-is render("% 0\n  an indented line\n%= 'foo'"), "  an indented line\nfoo";
+my @cases = (
+    ['', ''],
+    ['hello', 'hello'],
+    ["empty\n\nline",                                             "empty\n\nline",           'empty line'],
+    ["almost empty\n \nline",                                     "almost empty\n \nline",   'almost empty line'],
+    ['hello <%%> world',                                          'hello  world'],
+    ['hello <%= "world" %>',                                      'hello world'],
+    [['answer = <%= $^a + $^b %>', 40, 2],                        'answer = 42'],
+    ['hello <% "blarg" %> world',                                 'hello  world'],
+    ["% for 1..3 \{\nhello\n% \}\n",                              "hello\nhello\nhello\n",   'for 1..3'],
+    ["hello\n%# die 'this is an harmless comment'\nworld",        "hello\nworld",            '# comment in tag'],
+    ["<a href='foo'>bar</a>",                                     "<a href='foo'>bar</a>"],
+    [["a happy <%= \$^a %>\n", 'bar'],                            "a happy bar\n",           'a happy bar'],
+    [["% my (\$a, \$b) = \@_\n<%= \$a %> and <%= \$b %>", 5, 7],  '5 and 7',                 'code'],
+    ["% 0\n  an indented line\n%= 'foo'",                         "  an indented line\nfoo", 'indented line'],
+);
+
+for @cases -> $c {
+    my $tmpl = $c[0].WHAT === Str ?? $c[0] !! shift $c[0];
+    my @params = $c[0].WHAT === Str ?? () !! $c[0].list;
+
+    is render($tmpl, @params), $c[1], ($c[2] // $c[0]);
+}
+
+
