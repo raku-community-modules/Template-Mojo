@@ -24,8 +24,7 @@ my @cases = (
 );
 
 for @cases -> $c {
-    my $tmpl = $c[0].WHAT === Str ?? $c[0] !! shift $c[0];
-    my @params = $c[0].WHAT === Str ?? () !! $c[0].list;
+    my ($tmpl, @params) = $c[0].WHAT === Str ?? ($c[0]) !! $c[0].list;
 
     is render($tmpl, @params), $c[1], ($c[2] // $c[0]);
 }
