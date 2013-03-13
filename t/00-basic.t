@@ -62,8 +62,18 @@ ok $err ~~ /Too\smany\spositional\sparameters\spassed\;\sgot\s3\sbut\sexpected\s
 my $fh = open 'eg/template.tm', :r;
 my $tmpl = $fh.slurp;
 #diag $tmpl;
-#diag Template::Mojo.new($tmpl).render();
-ok Template::Mojo.new($tmpl).render() ~~ /^\s*hello\s*hello\s*hello\s*$/, 'template.tm';
+my $output = Template::Mojo.new($tmpl).render();
+#diag $output;
+
+# After changing the template one can save it with this code,
+# examine it, and if found correct, keep it as the new expected data
+#my $out = open 'eg/template.out', :w;
+#$out.print($output);
+#$out.close;
+
+my $fh2 = open 'eg/template.out', :r;
+my $expected = $fh2.slurp;
+is $output, $expected, 'template.tm';
 
 
 
