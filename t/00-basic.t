@@ -22,12 +22,42 @@ my @cases = (
     ["% 0\n  an indented line\n%= 'foo'",                         "  an indented line\nfoo", 'indented line'],
 );
 
-plan @cases.elems;
+plan 3 + @cases.elems;
 
 for @cases -> $c {
     my ($tmpl, @params) = $c[0].WHAT === Str ?? ($c[0]) !! $c[0].list;
 
     is render($tmpl, @params), $c[1], ($c[2] // $c[0]);
 }
+
+my $err;
+{
+    $err = '';
+    Template::Mojo.new('<%');
+    CATCH {
+        default { $err = $_ };
+    }
+}
+ok $err ~~ /Failed\sto\sparse\sthe\stemplate/, 'Bad template exception';
+
+{
+    $err = '';
+    Template::Mojo.new('<%= $^a + $^b %>').render(23);
+    CATCH {
+        default { $err = $_ };
+    }
+}
+ok $err ~~ /Not\senough\spositional\sparameters\spassed\;\sgot\s1\sbut\sexpected\s2/, 'not enough arguments';
+
+{
+    $err = '';
+    Template::Mojo.new('<%= $^a + $^b %>').render(23, 1, 4);
+    CATCH {
+        default { $err = $_ };
+    }
+}
+
+ok $err ~~ /Too\smany\spositional\sparameters\spassed\;\sgot\s3\sbut\sexpected\s2/, 'too many arguments';
+
 
 
