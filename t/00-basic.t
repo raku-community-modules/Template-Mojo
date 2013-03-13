@@ -1,6 +1,5 @@
 use Test;
 use Template::Mojo;
-plan 14;
 
 sub render($tmpl, *@a) {
     Template::Mojo.new($tmpl).render(|@a)
@@ -22,6 +21,8 @@ my @cases = (
     [["% my (\$a, \$b) = \@_\n<%= \$a %> and <%= \$b %>", 5, 7],  '5 and 7',                 'code'],
     ["% 0\n  an indented line\n%= 'foo'",                         "  an indented line\nfoo", 'indented line'],
 );
+
+plan @cases.elems;
 
 for @cases -> $c {
     my ($tmpl, @params) = $c[0].WHAT === Str ?? ($c[0]) !! $c[0].list;
