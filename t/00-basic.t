@@ -22,7 +22,7 @@ my @cases = (
     ["% 0\n  an indented line\n%= 'foo'",                         "  an indented line\nfoo", 'indented line'],
 );
 
-plan 3 + @cases.elems;
+plan 1 + 3 + @cases.elems;
 
 for @cases -> $c {
     my ($tmpl, @params) = $c[0].WHAT === Str ?? ($c[0]) !! $c[0].list;
@@ -58,6 +58,12 @@ ok $err ~~ /Not\senough\spositional\sparameters\spassed\;\sgot\s1\sbut\sexpected
 }
 
 ok $err ~~ /Too\smany\spositional\sparameters\spassed\;\sgot\s3\sbut\sexpected\s2/, 'too many arguments';
+
+my $fh = open 'eg/template.tm', :r;
+my $tmpl = $fh.slurp;
+#diag $tmpl;
+#diag Template::Mojo.new($tmpl).render();
+ok Template::Mojo.new($tmpl).render() ~~ /^\s*hello\s*hello\s*hello\s*$/, 'template.tm';
 
 
 
