@@ -84,3 +84,23 @@ class Template::Mojo {
         &.code.(|@a)
     }
 }
+
+=begin pod
+
+=TITLE class Template::Mojo
+
+A templating system modeled after the Perl 5 L<https://metacpan.org/module/Mojo::Template>
+
+=head1 Synopsis
+
+    my $tmpl = 
+
+    my $t = Template::Mojo.new($tmpl);
+    $t.render()
+
+=head1 Methods
+
+
+=end pod
+
+
