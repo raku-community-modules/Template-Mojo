@@ -77,7 +77,7 @@ class Template::Mojo {
         unless $m {
             die "Failed to parse the template"
         }
-        self.bless: *, :code(eval $m.ast)
+        self.bless: :code(eval $m.ast)
     }
 
     method render(*@a) {
