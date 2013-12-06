@@ -99,6 +99,15 @@ A templating system modeled after the Perl 5 L<https://metacpan.org/module/Mojo:
     my $t = Template::Mojo.new($tmpl);
     $t.render()
 
+=head1 Examples
+
+=head2 Loop
+
+  % for 1..3 {
+      hello
+  % }
+
+
 =head1 Methods
 
 
