@@ -93,7 +93,8 @@ A templating system modeled after the Perl 5 L<https://metacpan.org/module/Mojo:
 
 =head1 Synopsis
 
-    my $tmpl = 
+    my $fh = open 'eg/template.tm', :r;
+    my $tmpl = $fh.slurp;
 
     my $t = Template::Mojo.new($tmpl);
     $t.render()
