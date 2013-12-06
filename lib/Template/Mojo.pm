@@ -103,13 +103,62 @@ A templating system modeled after the Perl 5 L<https://metacpan.org/module/Mojo:
 
 =head2 Loop
 
+=head3 Template
+
   % for 1..3 {
       hello
   % }
 
+=head3 Code
 
-=head1 Methods
+  my $fh = open 'eg/template.tm', :r;
+  my $tmpl = $fh.slurp;
+  my $t = Template::Mojo.new($tmpl);
+  $t.render()
 
+=head3 Output
+
+  hello
+  hello
+  hello
+
+=head2 Parameters
+
+=head3 Template
+
+  % my ($x) = @_;
+
+  <%= $x %>
+  
+  % for 1..$x {
+      hello
+  % }
+
+
+See, on the first row of the template we accept a parameter as if this was a generic function call. Then we use the veriable in two different ways.
+
+=head3 Code
+
+The value to that subroutione can be passed in the render call:
+
+  my $fh = open 'eg/template.tm', :r;
+  my $tmpl = $fh.slurp;
+  my $t = Template::Mojo.new($tmpl);
+  $t.render(5)
+
+=head3 Output:
+
+  5
+  
+      hello
+      hello
+      hello
+      hello
+      hello
+
+=head1 Copyright
+
+Tadeusz Sośnierz
 
 =end pod
 
