@@ -156,6 +156,32 @@ The value to that subroutione can be passed in the render call:
       hello
       hello
 
+=head2 Passing hash
+
+=head3 Template
+
+  % my ($x) = @_;
+  
+  Fname: <%= $x<fname> %>
+  Lname: <%= $x<lname> %>
+
+=head3 Code
+
+  my %params = (
+    fname => 'Foo',
+    lname => 'Bar',
+  );
+
+  my $fh = open 'eg/template.tm', :r;
+  my $tmpl = $fh.slurp;
+  my $t = Template::Mojo.new($tmpl);
+  $t.render(%params)
+
+=head3 Output
+
+  Fname: Foo
+  Lname: Bar
+
 =head1 Copyright
 
 Tadeusz Sośnierz
