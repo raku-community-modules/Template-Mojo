@@ -2,7 +2,6 @@ use v6;
 use Test;
 use Template::Mojo;
 
-plan 1;
 
 my @cases = (
 	{
@@ -12,7 +11,17 @@ my @cases = (
 		name   => 'param',
 		params => 5,
 	},
+	{
+		name   => 'hash',
+		params => {
+			fname => 'Foo',
+			lname => 'Bar',
+		},
+		save => 0,
+	},
 );
+
+plan @cases.elems;
 
 for @cases -> $c {
 	my $fh = open "eg/$c<name>.tm", :r;
@@ -28,9 +37,11 @@ for @cases -> $c {
 	
 	# After changing the template one can save it with this code,
 	# examine it, and if found correct, keep it as the new expected data
-	#my $out = open "eg/$c<name>.out", :w;
-	#$out.print($output);
-	#$out.close;
+	if $c<save> {
+		my $out = open "eg/$c<name>.out", :w;
+		$out.print($output);
+		$out.close;
+	}
 	
 	my $fh2 = open "eg/$c<name>.out", :r;
 	my $expected = $fh2.slurp;
