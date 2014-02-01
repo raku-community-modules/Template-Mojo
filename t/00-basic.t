@@ -22,7 +22,7 @@ my @cases = (
     ["% 0\n  an indented line\n%= 'foo'",                         "  an indented line\nfoo", 'indented line'],
 );
 
-plan 1 + 3 + @cases.elems;
+plan 3 + @cases.elems;
 
 for @cases -> $c {
     my ($tmpl, @params) = $c[0].WHAT === Str ?? ($c[0]) !! $c[0].list;
