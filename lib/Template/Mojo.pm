@@ -182,6 +182,50 @@ The value to that subroutione can be passed in the render call:
   Fname: Foo
   Lname: Bar
 
+=head2 Complex examples
+
+=head3 Template
+
+  % my (%h) = @_;
+  
+  <h1><%= %h<title> %>
+  
+  <ul>
+  % for %h<pages>.values -> $p {
+    <li><a href="<%= $p<url> %>"><%= $p<title> %></a></li>
+  % }
+  </ul>
+
+=head3 Code
+
+  my %params = (
+     title => "Perl 6 Links",
+     pages => [
+        {
+          "title" => "Rakudo",
+          "url"   => "http://rakudo.org/",
+        },
+        {
+          title   => 'Perl 6',
+          url     => 'http://perl6.org/',
+        }
+     ],
+  );
+
+  my $fh = open 'eg/template.tm', :r;
+  my $tmpl = $fh.slurp;
+  my $t = Template::Mojo.new($tmpl);
+  $t.render(%params)
+
+=head3 Output
+
+  <h1>Perl 6 Links
+  
+  <ul>
+    <li><a href="http://rakudo.org/">Rakudo</a></li>
+    <li><a href="http://perl6.org/">Perl 6</a></li>
+  </ul>
+
 =head1 Copyright
 
 Tadeusz Sośnierz

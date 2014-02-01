@@ -1,0 +1,10 @@
+See t/02-complex.t how to generate complex.out from this template.
+
+<h1>Perl 6 Links
+
+<ul>
+  <li><a href="http://rakudo.org/">Rakudo</a></li>
+  <li><a href="http://perl6.org/">Perl 6</a></li>
+</ul>
+
+
