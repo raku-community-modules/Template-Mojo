@@ -47,7 +47,7 @@ ok $err ~~ /Failed\sto\sparse\sthe\stemplate/, 'Bad template exception';
         default { $err = $_ };
     }
 }
-ok $err ~~ /Too\sfew\spositionals\spassed\;\sexpected\s2\sarguments\sbut\sgot\s1/, 'not enough arguments';
+ok $err ~~ /expected\s2/ && $err ~~ /got\s1/, 'not enough arguments';
 
 {
     $err = '';
@@ -56,6 +56,6 @@ ok $err ~~ /Too\sfew\spositionals\spassed\;\sexpected\s2\sarguments\sbut\sgot\s1
         default { $err = $_ };
     }
 }
-ok $err ~~ /Too\smany\spositionals\spassed\;\sexpected\s2\sarguments\sbut\sgot\s3/, 'too many arguments';
+ok $err ~~ /expected\s2/ && $err ~~ /got\s3/, 'too many arguments';
 
 
