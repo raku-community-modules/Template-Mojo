@@ -21,8 +21,7 @@ plan 1;
 
 #diag %params.perl;
 
-my $fh = open "eg/complex.tm", :r;
-my $tmpl = $fh.slurp;
+my $tmpl = slurp "eg/complex.tm";
 #diag $tmpl;
 my $output = Template::Mojo.new($tmpl).render(%params);
 #diag $output;
@@ -35,7 +34,6 @@ if 0 {
 	$out.close;
 }
 	
-my $fh2 = open "eg/complex.out", :r;
-my $expected = $fh2.slurp;
+my $expected = slurp "eg/complex.out";
 is $output, $expected, 'complex';
 

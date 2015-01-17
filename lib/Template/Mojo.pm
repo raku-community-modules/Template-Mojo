@@ -93,8 +93,7 @@ A templating system modeled after the Perl 5 L<https://metacpan.org/module/Mojo:
 
 =head1 Synopsis
 
-    my $fh = open 'eg/template.tm', :r;
-    my $tmpl = $fh.slurp;
+    my $tmpl = slurp 'eg/template.tm';
 
     my $t = Template::Mojo.new($tmpl);
     $t.render()
@@ -111,8 +110,7 @@ A templating system modeled after the Perl 5 L<https://metacpan.org/module/Mojo:
 
 =head3 Code
 
-  my $fh = open 'eg/template.tm', :r;
-  my $tmpl = $fh.slurp;
+  my $tmpl = slurp 'eg/template.tm';
   my $t = Template::Mojo.new($tmpl);
   $t.render()
 
@@ -141,8 +139,7 @@ See, on the first row of the template we accept a parameter as if this was a gen
 
 The value to that subroutione can be passed in the render call:
 
-  my $fh = open 'eg/template.tm', :r;
-  my $tmpl = $fh.slurp;
+  my $tmpl = slurp 'eg/template.tm';
   my $t = Template::Mojo.new($tmpl);
   $t.render(5)
 
@@ -172,8 +169,7 @@ The value to that subroutione can be passed in the render call:
     lname => 'Bar',
   );
 
-  my $fh = open 'eg/template.tm', :r;
-  my $tmpl = $fh.slurp;
+  my $tmpl = slurp 'eg/template.tm';
   my $t = Template::Mojo.new($tmpl);
   $t.render(%params)
 
@@ -212,8 +208,7 @@ The value to that subroutione can be passed in the render call:
      ],
   );
 
-  my $fh = open 'eg/template.tm', :r;
-  my $tmpl = $fh.slurp;
+  my $tmpl = slurp 'eg/template.tm';
   my $t = Template::Mojo.new($tmpl);
   $t.render(%params)
 

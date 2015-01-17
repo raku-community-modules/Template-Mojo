@@ -24,8 +24,7 @@ my @cases = (
 plan @cases.elems;
 
 for @cases -> $c {
-	my $fh = open "eg/$c<name>.tm", :r;
-	my $tmpl = $fh.slurp;
+	my $tmpl = slurp "eg/$c<name>.tm";
 	#diag $tmpl;
 	my $output;
 	if $c<params> {
@@ -43,8 +42,7 @@ for @cases -> $c {
 		$out.close;
 	}
 	
-	my $fh2 = open "eg/$c<name>.out", :r;
-	my $expected = $fh2.slurp;
+	my $expected = slurp "eg/$c<name>.out";
 	is $output, $expected, $c<name>;
 }
 
