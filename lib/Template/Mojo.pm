@@ -67,6 +67,9 @@ class Template::Mojo::Actions {
     }
 }
 
+class X::Template::Mojo::ParseError is Exception {
+}
+
 class Template::Mojo {
     has &.code;
 
@@ -75,7 +78,7 @@ class Template::Mojo {
             $tmpl, :actions(Template::Mojo::Actions.new)
         );
         unless $m {
-            die "Failed to parse the template"
+            die X::Template::Mojo::ParseError.new(message => "Failed to parse the template")
         }
         self.bless: :code(EVAL $m.ast)
     }

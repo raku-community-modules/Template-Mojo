@@ -38,7 +38,7 @@ my $err;
         default { $err = $_ };
     }
 }
-ok $err ~~ /Failed\sto\sparse\sthe\stemplate/, 'Bad template exception';
+ok $err ~~ X::Template::Mojo::ParseError, 'Bad template exception';
 
 {
     $err = '';
