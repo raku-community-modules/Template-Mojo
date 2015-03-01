@@ -27,7 +27,7 @@ class Template::Mojo::Actions {
         my @exprs = $<expression>».ast;
         @exprs.unshift: 'my $_M = "";';
         @exprs.push: ';return $_M;';
-        my $code = 'sub { ' ~ @exprs.join ~ '}';
+        my $code = 'sub ' ~ $*TMPLNAME ' ~ { ' ~ @exprs.join ~ '}';
         make $code;
     }
 
@@ -70,10 +70,18 @@ class Template::Mojo::Actions {
 class X::Template::Mojo::ParseError is Exception {
 }
 
+my $*TMPLNAME = "anon";
+
 class Template::Mojo {
     has &.code;
 
-    method new(Str $tmpl) {
+    method from-file(Str $filename) {
+        my $tmpl = $filename.IO.slurp;
+        self.new($tmpl, $filename.IO.basename.split(".")[0]);
+    }
+
+    method new(Str $tmpl, :$name = "anon") {
+        my $*TMPLNAME = $name;
         my $m = Template::Mojo::Grammar.parse(
             $tmpl, :actions(Template::Mojo::Actions.new)
         );
@@ -100,6 +108,8 @@ A templating system modeled after the Perl 5 L<https://metacpan.org/module/Mojo:
 
     my $t = Template::Mojo.new($tmpl);
     $t.render()
+
+    my $ot = Template::Mojo.from-file('eg/template.tm');
 
 =head1 Examples
 
