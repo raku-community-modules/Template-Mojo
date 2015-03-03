@@ -27,7 +27,7 @@ class Template::Mojo::Actions {
         my @exprs = $<expression>».ast;
         @exprs.unshift: 'my $_M = "";';
         @exprs.push: ';return $_M;';
-        my $code = 'sub ' ~ $*TMPLNAME ' ~ { ' ~ @exprs.join ~ '}';
+        my $code = 'sub ' ~ $*TMPLNAME ~ ' { ' ~ @exprs.join ~ '}';
         make $code;
     }
 
