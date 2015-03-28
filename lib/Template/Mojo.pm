@@ -77,7 +77,7 @@ class Template::Mojo {
 
     method from-file(Str $filename) {
         my $tmpl = $filename.IO.slurp;
-        self.new($tmpl, $filename.IO.basename.split(".")[0]);
+        self.new($tmpl, name => $filename.IO.basename.split(".")[0]);
     }
 
     method new(Str $tmpl, :$name = "anon") {
