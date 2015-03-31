@@ -3,5 +3,8 @@
     "version"     : "*",
     "description" : "A templating system similar to Perl 5's Mojo::Template",
     "depends"     : [],
+    "provides"    : {
+        "Template::Mojo": "lib/Template/Mojo.pm6"
+    },
     "source-url"  : "git://github.com/tadzik/Template-Mojo.git"
 }
