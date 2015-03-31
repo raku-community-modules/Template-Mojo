@@ -1,7 +1,15 @@
 {
-    "name"        : "Template::Mojo",
-    "version"     : "*",
-    "description" : "A templating system similar to Perl 5's Mojo::Template",
-    "depends"     : [],
-    "source-url"  : "git://github.com/tadzik/Template-Mojo.git"
+    "perl"          : "v6",
+    "name"          : "Template::Mojo",
+    "version"       : "v0.1",
+    "description"   : "A templating system similar to Perl 5's Mojo::Template",
+    "build-depends" : [],
+
+    "provides"      : {
+        "Template::Mojo" : "lib/Template/Mojo.pm"
+    },
+
+    "support"       : {
+        "source" : "git://github.com/tadzik/Template-Mojo.git"
+    }
 }
