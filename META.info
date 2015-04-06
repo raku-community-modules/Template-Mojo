@@ -11,5 +11,6 @@
 
     "support"       : {
         "source" : "git://github.com/tadzik/Template-Mojo.git"
-    }
+    },
+    "source-url"    : "git://github.com/tadzik/Template-Mojo.git"
 }
