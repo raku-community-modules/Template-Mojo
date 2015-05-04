@@ -5,6 +5,8 @@ grammar Template::Mojo::Grammar {
 
     token expression {
         || <perlline>
+        || <perlcapture-begin>
+        || <perlcapture-end>
         || <perlexpr>
         || <characters>
     }
@@ -13,8 +15,24 @@ grammar Template::Mojo::Grammar {
         ^^ \h* '%' $<get-result>=['=']? $<expr>=[ <-[\n]>* ] [\n | $]
     }
 
+    rule perlcapture-begin {
+        '<%' 'my' $<name>=<var> '=' 'begin' '%>'
+    }
+
+    rule perlcapture-end {
+        '<%' 'end' '%>'
+    }
+
     token perlexpr {
         '<%' $<get-result>=['=']? $<expr>=[ [ <!before '%>' > . ]* ] '%>'
+    }
+
+    token var {
+        <sigil> [ \w+ ]
+    }
+
+    token sigil {
+        '&' | '$'
     }
 
     token characters {
@@ -35,6 +53,12 @@ class Template::Mojo::Actions {
         if $<perlline> {
             make $<perlline>.ast
         }
+        elsif $<perlcapture-begin> {
+            make $<perlcapture-begin>.ast
+        }
+        elsif $<perlcapture-end> {
+            make $<perlcapture-end>.ast
+        }
         elsif $<perlexpr> {
             make $<perlexpr>.ast
         }
@@ -46,6 +70,14 @@ class Template::Mojo::Actions {
 
     method perlline($/) {
         make expr($/) ~ "\n"
+    }
+
+    method perlcapture-begin($/) {
+        make 'my ' ~ $<name> ~ ' = sub {temp $_M = "";';
+    }
+
+    method perlcapture-end($/) {
+        make ';return $_M};';
     }
 
     method perlexpr($/) {
