@@ -4,12 +4,22 @@
     "version"       : "v0.1",
     "description"   : "A templating system similar to Perl 5's Mojo::Template",
     "build-depends" : [],
-
     "provides"      : {
         "Template::Mojo" : "lib/Template/Mojo.pm"
     },
-
-    "support"       : {
+    "authors" : [
+        "Tadeusz “tadzik” Sośnierz",
+        "Andrew Egeler",
+        "Anthony Parsons",
+        "Carl Mäsak",
+        "Gabor Szabo",
+        "Moritz Lenz",
+        "Sterling Hanenkamp",
+        "Timo Paulssen",
+        "Tobias Leich"
+    ],
+    "support" : {
+        "bugtracker" : "https://github.com/tadzik/Template-Mojo/issues",
         "source" : "git://github.com/tadzik/Template-Mojo.git"
     },
     "source-url"    : "git://github.com/tadzik/Template-Mojo.git"
