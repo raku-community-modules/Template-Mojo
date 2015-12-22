@@ -1,3 +1,4 @@
+use MONKEY-SEE-NO-EVAL;
 grammar Template::Mojo::Grammar {
     token TOP {
         ^ <expression>* $
