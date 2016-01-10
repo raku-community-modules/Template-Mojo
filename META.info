@@ -1,5 +1,5 @@
 {
-    "perl"          : "v6",
+    "perl"          : "6",
     "name"          : "Template::Mojo",
     "version"       : "v0.1",
     "description"   : "A templating system similar to Perl 5's Mojo::Template",
