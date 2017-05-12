@@ -1,6 +1,7 @@
 {
     "perl"          : "6",
     "name"          : "Template::Mojo",
+    "license"       : "MIT",
     "version"       : "v0.1",
     "description"   : "A templating system similar to Perl 5's Mojo::Template",
     "build-depends" : [],
