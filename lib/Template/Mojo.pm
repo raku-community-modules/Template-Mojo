@@ -124,8 +124,8 @@ class Template::Mojo {
         self.bless: :code(EVAL $m.ast)
     }
 
-    method render(*@a) {
-        &.code.(|@a)
+    method render(*@a, *%a) {
+        &.code.(|@a, |%a)
     }
 }
 
