@@ -1,0 +1,1 @@
+prove -rv -e "perl6 -I ./lib" t

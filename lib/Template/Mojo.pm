@@ -164,8 +164,6 @@ class Template::Mojo {
     has Str $!from; # directory of the templates
 
     submethod BUILD(:$code!, *%options) {
-        say $code;
-
         &!code    = EVAL($code);
         $!from    = %options{'from'} // '';
         $!layout  = %options{'layout'} // '';
