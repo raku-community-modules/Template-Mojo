@@ -8,6 +8,9 @@ grammar Template::Mojo::Grammar {
         || <perlline>
         || <perlcapture-begin>
         || <perlcapture-end>
+        || <perlcontent-for>
+        || <perlcontent>
+        || <perlextends>
         || <perlexpr>
         || <characters>
     }
@@ -22,6 +25,18 @@ grammar Template::Mojo::Grammar {
 
     rule perlcapture-end {
         '<%' 'end' '%>'
+    }
+
+    rule perlcontent-for {
+        '<%' $<print>='='? 'content'$<form>=('-for'|'-with'|'') $<name>=\w+ '=>' 'begin' '%>'
+    }
+
+    rule perlcontent {
+        '<%=' 'content' ('-'('for'|'with'))? ($<name>=\w+)? '%>'
+    }
+
+    rule perlextends {
+        '<%' 'extends' $<template>=\w+ '%>'
     }
 
     token perlexpr {
@@ -60,6 +75,15 @@ class Template::Mojo::Actions {
         elsif $<perlcapture-end> {
             make $<perlcapture-end>.ast
         }
+        elsif $<perlcontent-for> {
+            make $<perlcontent-for>.ast
+        }
+        elsif $<perlcontent> {
+            make $<perlcontent>.ast
+        }
+        elsif $<perlextends> {
+            make $<perlextends>.ast
+        }
         elsif $<perlexpr> {
             make $<perlexpr>.ast
         }
@@ -79,6 +103,30 @@ class Template::Mojo::Actions {
 
     method perlcapture-end($/) {
         make ';return $_M};';
+    }
+
+    method perlcontent-for($/) {
+        my $type  = $<form>.Str ?? $<form> !! '';
+        my $print = $<print> eq '=' ?? True !! False;
+        my $output = 'self.content' ~ $type ~ ': ' ~ $<name> ~ ' => sub {temp $_M = "";';
+
+        if ($print) {
+            return make '$_M ~= ' ~ $output;
+        }
+
+        return make $output;
+    }
+
+    method perlcontent($/) {
+        if ($/[1]<name>) {
+            return make '$_M ~= self.content: "' ~ $/[1]<name> ~ '";';
+        }
+
+        return make '$_M ~= self.content;';
+    }
+
+    method perlextends($/) {
+        return make "self.extends: \"{ $<template> }\";";
     }
 
     method perlexpr($/) {
@@ -107,13 +155,39 @@ my $*TMPLNAME = "anon";
 
 class Template::Mojo {
     has &.code;
+    has %!content;
+    has %!args;
 
-    method from-file(Str $filename) {
-        my $tmpl = $filename.IO.slurp;
-        self.new($tmpl, name => $filename.IO.basename.split(".")[0]);
+    has Str $!extends; # parent template
+    has Str $!layout;  # layout template
+
+    has Str $!from; # directory of the templates
+
+    submethod BUILD(:$code!, *%options) {
+        say $code;
+
+        &!code    = EVAL($code);
+        $!from    = %options{'from'} // '';
+        $!layout  = %options{'layout'} // '';
+        %!content = %options{'content'} // ();
+
+        return self;
     }
 
-    method new(Str $tmpl, :$name = "anon") {
+    method from-file(Str $filename is copy, *%options) {
+        if (%options{'from'}) {
+            $filename = %options{'from'} ~ '/' ~ $filename;
+        }
+
+        my $tmpl = $filename.IO.slurp;
+        return self.new(
+            $tmpl,
+            name => $filename.IO.basename.split(".")[0],
+            |%options,
+        );
+    }
+
+    method new(Str $tmpl, :$name = "anon", *%options) {
         my $*TMPLNAME = $name;
         my $m = Template::Mojo::Grammar.parse(
             $tmpl, :actions(Template::Mojo::Actions.new)
@@ -121,11 +195,120 @@ class Template::Mojo {
         unless $m {
             die X::Template::Mojo::ParseError.new(message => "Failed to parse the template")
         }
-        self.bless: :code(EVAL $m.ast)
+
+        self.bless: code => $m.ast, |%options;
     }
 
     method render(*@a, *%a) {
-        &.code.(|@a, |%a)
+        %!args = (
+            'list'  => @a,
+            'named' => %a,
+        );
+
+        my Str $output = &!code.(|@a, |%a);
+
+        return $output if !$!from;
+
+        # process the parent template
+        #   - read the template
+        #   - process the template, need to pass:
+        #       - %!content
+        #       - %options
+        if ($!extends) {
+            my $extend_template = self.from-file(
+                $!extends ~ '.tm',
+                from    => $!from,
+                content => %!content,
+            );
+
+            $output ~= $extend_template.render(|@a, |%a,);
+        }
+
+        return $output if !$!layout;
+
+        # process the layout template like the extended, but
+        # return its output
+        my $layout_template = self.from-file(
+            $!layout ~ '.tm',
+            from    => $!from,
+            content => (
+                |%!content,
+                content => $output,
+            ),
+        );
+
+        return $layout_template.render(|@a, |%a,);
+    }
+
+    method content-for(|args) {
+        my $pair = args.pairs[0];
+        return self._content(
+            name   => $pair.key,
+            block  => $pair.value,
+            action => 'append',
+        );
+    }
+
+    method content-with(|args) {
+        my $pair = args.pairs[0];
+        return self._content(
+            name   => $pair.key,
+            block  => $pair.value,
+            action => 'replace',
+        );
+    }
+
+    multi method content(Str $name) {
+        return self._content(name => $name);
+    }
+
+    multi method content(|args) {
+        if (!args.pairs.elems) {
+            return self._content(name => 'content');
+        }
+
+        my $pair = args.pairs[0];
+        return self._content(
+            name   => $pair.key,
+            block  => $pair.value,
+        );
+    }
+
+    method extends(Str $template) {
+        $!extends = $template;
+    }
+
+    method _content(Str :$name, :$block, *%options) {
+        if (!$block.defined) {
+            return %!content{$name} // '';
+        }
+
+        my $result = sub ($block) {
+            my @expected_params = $block.signature.params;
+            my %block_params    = ();
+            for @expected_params -> $param {
+                my Match $name = $param.name ~~ m/^\$(.*)$/;
+                %block_params{$name[0]} = %!args{'named'}{$name[0]};
+            }
+
+            return $block.isa(Block) ?? $block.(|%block_params) !! $block;
+        };
+
+        given %options{'action'} {
+            when 'append' {
+                %!content{$name} ~= $result($block);
+            }
+
+            when 'replace' {
+                %!content{$name} = $result($block);
+            }
+
+            default { # inheritance purpose
+                %!content{$name} //= $result($block);
+            }
+        }
+
+        return %!content{$name} // '';
     }
 }
 
@@ -173,7 +356,7 @@ A templating system modeled after the Perl 5 L<https://metacpan.org/module/Mojo:
   % my ($x) = @_;
 
   <%= $x %>
-  
+
   % for 1..$x {
       hello
   % }
@@ -192,7 +375,7 @@ The value to that subroutione can be passed in the render call:
 =head3 Output:
 
   5
-  
+
       hello
       hello
       hello
@@ -204,7 +387,7 @@ The value to that subroutione can be passed in the render call:
 =head3 Template
 
   % my ($x) = @_;
-  
+
   Fname: <%= $x<fname> %>
   Lname: <%= $x<lname> %>
 
@@ -229,9 +412,9 @@ The value to that subroutione can be passed in the render call:
 =head3 Template
 
   % my (%h) = @_;
-  
+
   <h1><%= %h<title> %>
-  
+
   <ul>
   % for %h<pages>.values -> $p {
     <li><a href="<%= $p<url> %>"><%= $p<title> %></a></li>
@@ -261,7 +444,7 @@ The value to that subroutione can be passed in the render call:
 =head3 Output
 
   <h1>Perl 6 Links
-  
+
   <ul>
     <li><a href="http://rakudo.org/">Rakudo</a></li>
     <li><a href="http://perl6.org/">Perl 6</a></li>
