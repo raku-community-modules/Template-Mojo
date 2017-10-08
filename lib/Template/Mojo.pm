@@ -173,8 +173,14 @@ class Template::Mojo {
     }
 
     method from-file(Str $filename is copy, *%options) {
+        # option 'from' corresponds to the templates directory
         if (%options{'from'}) {
             $filename = %options{'from'} ~ '/' ~ $filename;
+        }
+
+        # if 'filename' extension isn't '.tm' add it
+        if (!($filename ~~ m:i/\.tm$/)) {
+            $filename ~= '.tm';
         }
 
         my $tmpl = $filename.IO.slurp;
@@ -214,7 +220,7 @@ class Template::Mojo {
         #       - %options
         if ($!extends) {
             my $extend_template = self.from-file(
-                $!extends ~ '.tm',
+                $!extends,
                 from    => $!from,
                 content => %!content,
             );
