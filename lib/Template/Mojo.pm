@@ -109,7 +109,7 @@ class Template::Mojo {
     has &.code;
 
     method from-file(Str $filename) {
-        my $tmpl = $filename.IO.slurp;
+        my $tmpl = $filename.IO.slurp.self;
         self.new($tmpl, name => $filename.IO.basename.split(".")[0]);
     }
 
