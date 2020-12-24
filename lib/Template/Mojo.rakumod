@@ -121,11 +121,12 @@ class Template::Mojo {
         unless $m {
             die X::Template::Mojo::ParseError.new(message => "Failed to parse the template")
         }
+        say $m.ast;
         self.bless: :code(EVAL $m.ast)
     }
 
     method render(*@a, *%a) {
-        &.code.(|@a, |%a)
+       &!code(|@a, |%a)
     }
 }
 
@@ -179,11 +180,11 @@ A templating system modeled after the Perl 5 L<https://metacpan.org/module/Mojo:
   % }
 
 
-See, on the first row of the template we accept a parameter as if this was a generic function call. Then we use the veriable in two different ways.
+See, on the first row of the template we accept a parameter as if this was a generic function call. Then we use the variable in two different ways.
 
 =head3 Code
 
-The value to that subroutione can be passed in the render call:
+The value to that subroutine can be passed in the render call:
 
   my $tmpl = slurp 'eg/template.tm';
   my $t = Template::Mojo.new($tmpl);
