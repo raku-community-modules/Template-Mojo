@@ -6,7 +6,7 @@
     "description"   : "A templating system similar to Perl's Mojo::Template",
     "build-depends" : [],
     "provides"      : {
-        "Template::Mojo" : "lib/Template/Mojo.pm"
+        "Template::Mojo" : "lib/Template/Mojo.rakumod"
     },
     "authors" : [
         "Tadeusz “tadzik” Sośnierz",
