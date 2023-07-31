@@ -1,4 +1,3 @@
-use MONKEY-SEE-NO-EVAL;
 grammar Template::Mojo::Grammar {
     token TOP {
         ^ <expression>* $
@@ -121,7 +120,7 @@ class Template::Mojo {
         unless $m {
             die X::Template::Mojo::ParseError.new(message => "Failed to parse the template")
         }
-        self.bless: :code(EVAL $m.ast)
+        self.bless: :code($m.ast.EVAL)
     }
 
     method render(*@a, *%a) {
@@ -133,9 +132,9 @@ class Template::Mojo {
 
 =TITLE class Template::Mojo
 
-A templating system modeled after the Perl 5 L<https://metacpan.org/module/Mojo::Template>
+A templating system modeled after the Perl's L<https://metacpan.org/module/Mojo::Template>
 
-=head1 Synopsis
+=head1 SYNOPSIS
 
     my $tmpl = slurp 'eg/template.tm';
 
@@ -144,7 +143,7 @@ A templating system modeled after the Perl 5 L<https://metacpan.org/module/Mojo:
 
     my $ot = Template::Mojo.from-file('eg/template.tm');
 
-=head1 Examples
+=head1 EXAMPLES
 
 =head2 Loop
 
@@ -267,10 +266,30 @@ The value to that subroutione can be passed in the render call:
     <li><a href="http://perl6.org/">Perl 6</a></li>
   </ul>
 
-=head1 Copyright
+=head1 AUTHOR
 
-Tadeusz Sośnierz
+Tadeusz “tadzik” Sośnierz"
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2012-2017 Tadeusz Sośnierz
+Copyright 2023 Raku Community
+
+This library is free software; you can redistribute it and/or modify it under the MIT license.
+
+Please see the LICENCE file in the distribution
+
+=head1 CONTRIBUTORS
+
+=item Andrew Egeler
+=item Anthony Parsons
+=item Carl Masak
+=item Gabor Szabo
+=item Moritz Lenz
+=item Sterling Hanenkamp
+=item Timo Paulssen
+=item Tobias Leich
 
 =end pod
 
-
+# vim: expandtab shiftwidth=4

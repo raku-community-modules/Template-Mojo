@@ -1,4 +1,3 @@
-use v6;
 use Test;
 use Template::Mojo;
 
@@ -46,3 +45,4 @@ for @cases -> $c {
 	is $output, $expected, $c<name>;
 }
 
+# vim: expandtab shiftwidth=4

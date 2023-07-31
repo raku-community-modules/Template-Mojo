@@ -58,4 +58,4 @@ ok $err ~~ /expected\s2/ && $err ~~ /got\s1/, 'not enough arguments';
 }
 ok $err ~~ /expected\s2/ && $err ~~ /got\s3/, 'too many arguments';
 
-
+# vim: expandtab shiftwidth=4

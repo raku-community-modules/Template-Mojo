@@ -1,4 +1,3 @@
-use v6;
 use Test;
 use Template::Mojo;
 
@@ -13,3 +12,5 @@ diag $output;
 
 my $expected = slurp "eg/capture.out";
 is $output, $expected, 'capture';
+
+# vim: expandtab shiftwidth=4

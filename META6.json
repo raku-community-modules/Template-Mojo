@@ -1,27 +1,33 @@
 {
-    "perl"          : "6",
-    "name"          : "Template::Mojo",
-    "license"       : "MIT",
-    "version"       : "v0.1",
-    "description"   : "A templating system similar to Perl 5's Mojo::Template",
-    "build-depends" : [],
-    "provides"      : {
-        "Template::Mojo" : "lib/Template/Mojo.pm"
-    },
-    "authors" : [
-        "Tadeusz “tadzik” Sośnierz",
-        "Andrew Egeler",
-        "Anthony Parsons",
-        "Carl Mäsak",
-        "Gabor Szabo",
-        "Moritz Lenz",
-        "Sterling Hanenkamp",
-        "Timo Paulssen",
-        "Tobias Leich"
-    ],
-    "support" : {
-        "bugtracker" : "https://github.com/tadzik/Template-Mojo/issues",
-        "source" : "git://github.com/tadzik/Template-Mojo.git"
-    },
-    "source-url"    : "git://github.com/tadzik/Template-Mojo.git"
+  "auth": "zef:raku-community-modules",
+  "authors": [
+    "Tadeusz “tadzik” Sośnierz",
+    "Andrew Egeler",
+    "Anthony Parsons",
+    "Carl Mäsak",
+    "Gabor Szabo",
+    "Moritz Lenz",
+    "Sterling Hanenkamp",
+    "Timo Paulssen",
+    "Tobias Leich"
+  ],
+  "build-depends": [
+  ],
+  "depends": [
+  ],
+  "description": "A templating system similar to Perl's Mojo::Template",
+  "license": "MIT",
+  "name": "Template::Mojo",
+  "perl": "6",
+  "provides": {
+    "Template::Mojo": "lib/Template/Mojo.rakumod"
+  },
+  "resources": [
+  ],
+  "source-url": "git://github.com/tadzik/Template-Mojo.git",
+  "tags": [
+  ],
+  "test-depends": [
+  ],
+  "version": "0.2"
 }
