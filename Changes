@@ -2,5 +2,9 @@ Revision history for Template-Mojo
 
 {{$NEXT}}
 
+0.2.1  2023-07-31T17:16:08+02:00
+    - Fix source-url in META
+    - Add tags in META
+
 0.2  2023-07-31T17:00:43+02:00
     - First version in the zef ecosystem

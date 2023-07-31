@@ -24,10 +24,12 @@
   },
   "resources": [
   ],
-  "source-url": "git://github.com/tadzik/Template-Mojo.git",
+  "source-url": "https://github.com/raku-community-modules/Template-Mojo.git",
   "tags": [
+    "TEMPLATE",
+    "MOJO"
   ],
   "test-depends": [
   ],
-  "version": "0.2"
+  "version": "0.2.1"
 }
