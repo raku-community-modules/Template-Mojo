@@ -1,4 +1,6 @@
 Revision history for Template-Mojo
 
 {{$NEXT}}
+
+0.2  2023-07-31T17:00:43+02:00
     - First version in the zef ecosystem
